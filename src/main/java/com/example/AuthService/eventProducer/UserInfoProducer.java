@@ -18,8 +18,8 @@ public class UserInfoProducer {
     @Value("${spring.kafka.topic-json.name}")
     private String topicJsonName;
 
-    public void sendEventToKafka(UserInfoDto eventData) {
-        Message<UserInfoDto> message = MessageBuilder.withPayload(eventData)
+    public void sendEventToKafka(UserInfoEvent eventData) {
+        Message<UserInfoEvent> message = MessageBuilder.withPayload(eventData)
                 .setHeader(KafkaHeaders.TOPIC, topicJsonName)
                 .build();
         kafkaTemplate.send(message);

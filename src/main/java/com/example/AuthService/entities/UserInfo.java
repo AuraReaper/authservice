@@ -1,10 +1,7 @@
 package com.example.AuthService.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,11 +18,17 @@ public class UserInfo {
     @Column(name = "user_id")
     private String userId;
 
+    @NonNull
     private String email;
+    @NonNull
     private String firstName;
+    @NonNull
     private String lastName;
+    @NonNull
     private Long phoneNumber;
+    @NonNull
     private String username;
+    @NonNull
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

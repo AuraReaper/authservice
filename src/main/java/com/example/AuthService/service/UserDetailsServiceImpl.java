@@ -1,6 +1,7 @@
 package com.example.AuthService.service;
 
 import com.example.AuthService.entities.UserInfo;
+import com.example.AuthService.eventProducer.UserInfoEvent;
 import com.example.AuthService.eventProducer.UserInfoProducer;
 import com.example.AuthService.models.UserInfoDto;
 import com.example.AuthService.repository.UserRepository;
@@ -68,12 +69,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .build();
         userRepository.save(user);
         // push event to queue
-        userInfoProducer.sendEventToKafka(new UserInfoDto(userInfoDto.username(), encodedPassword,
-                userInfoDto.firstName(), userInfoDto.lastName(), userInfoDto.email(), userInfoDto.phoneNumber()));
+        userInfoProducer.sendEventToKafka(userInfoEventToPublish(userInfoDto, userId));
         return true;
     }
 
     public List<UserInfo> getAllUsers() {
         return (List<UserInfo>) userRepository.findAll();
+    }
+
+    private UserInfoEvent userInfoEventToPublish(UserInfoDto userInfoDto, String userId) {
+        return UserInfoEvent.builder()
+                .userId(userId)
+                .firstName(userInfoDto.firstName())
+                .lastName(userInfoDto.lastName())
+                .email(userInfoDto.email())
+                .phoneNumber(userInfoDto.phoneNumber())
+                .build();
     }
 }
