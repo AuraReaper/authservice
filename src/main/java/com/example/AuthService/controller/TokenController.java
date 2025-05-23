@@ -31,11 +31,11 @@ public class TokenController {
 
     @PostMapping("auth/v1/login")
     public ResponseEntity<Object> authenticateAndGetToken(@RequestBody AuthRequestDto authRequestDto){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.getUsername(), authRequestDto.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDto.username(), authRequestDto.password()));
         if(authentication.isAuthenticated()) {
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDto.getUsername());
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDto.username());
             return new ResponseEntity<>(JwtResponseDto.builder()
-                    .accessToken(jwtService.GenerateToken(authRequestDto.getUsername()))
+                    .accessToken(jwtService.GenerateToken(authRequestDto.username()))
                     .token(refreshToken.getToken())
                     .build(), HttpStatus.OK);
         } else {
@@ -49,7 +49,7 @@ public class TokenController {
                 .map(refreshTokenService::verifyRefreshToken)
                 .map(RefreshToken::getUserInfo)
                 .map(userInfo -> {
-                    String accessToken = jwtService.GenerateToken(userInfo.getUserName());
+                    String accessToken = jwtService.GenerateToken(userInfo.getUsername());
                     return JwtResponseDto.builder()
                             .accessToken(accessToken)
                             .token(refreshTokenRequest.getToken())

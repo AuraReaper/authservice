@@ -2,6 +2,7 @@ package com.example.AuthService.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,14 +14,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@Builder
 public class UserInfo {
 
     @Id
     @Column(name = "user_id")
     private String userId;
 
-    private String userName;
-
+    private String email;
+    private String firstName;
+    private String lastName;
+    private Long phoneNumber;
+    private String username;
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
